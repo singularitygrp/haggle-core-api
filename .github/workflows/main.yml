@@ -61,4 +61,4 @@ jobs:
           containerAppName: ca-haggle-core-api-prod
           resourceGroup: rg-sg-prod
           imageToDeploy: crsgprod.azurecr.io/haggle-core-api:${{ github.run_number }}
-          environmentVariables: 'LANGCHAIN_API_KEY=secretref:langchain-api-key LANGCHAIN_TRACING_V2=true LANGCHAIN_CALLBACKS_BACKGROUND=true LANGCHAIN_ENDPOINT=secretref:langchain-endpoint LANGCHAIN_PROJECT=secretref:langchain-project OPENAI_API_KEY=secretref:openai-api-key SCRAPYBARA_API_KEY=secretref:scrapybara-api-key TELEGRAM_BOT_TOKEN=secretref:telegram-bot-token'
+          environmentVariables: 'AZURE_OPENAI_API_INSTANCE_NAME=secretref:azure-openai-api-instance-name AZURE_OPENAI_API_KEY=secretref:azure-openai-api-key LANGCHAIN_API_KEY=secretref:langchain-api-key LANGCHAIN_TRACING_V2=true LANGCHAIN_CALLBACKS_BACKGROUND=true LANGCHAIN_ENDPOINT=secretref:langchain-endpoint LANGCHAIN_PROJECT=secretref:langchain-project SCRAPYBARA_API_KEY=secretref:scrapybara-api-key TELEGRAM_BOT_TOKEN=secretref:telegram-bot-token'
