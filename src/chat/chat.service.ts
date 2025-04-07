@@ -7,12 +7,17 @@ import {
 import { Bot } from 'grammy';
 import { ConfigService } from '@nestjs/config';
 
+import { AiService } from '../ai/ai.service';
+
 @Injectable()
 export class ChatService implements OnModuleInit, OnModuleDestroy {
   private readonly bot: Bot;
   private readonly logger = new Logger(ChatService.name);
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly aiService: AiService,
+    private readonly configService: ConfigService,
+  ) {
     this.bot = new Bot(
       this.configService.getOrThrow<string>('TELEGRAM_BOT_TOKEN'),
     );
