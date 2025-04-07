@@ -8,6 +8,7 @@ import { Bot } from 'grammy';
 import { ConfigService } from '@nestjs/config';
 
 import { AiService } from '../ai/ai.service';
+import { HumanMessage } from '@langchain/core/messages';
 
 @Injectable()
 export class ChatService implements OnModuleInit, OnModuleDestroy {
@@ -33,6 +34,12 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
 
   async sendMessage(message: any) {
     console.log(message);
+    const priceFinder = this.aiService.getPriceFinder();
+    const agentFinalState = await priceFinder.invoke(
+      { messages: [new HumanMessage(message)] },
+      { configurable: { thread_id: 1 } },
+    );
+    console.log('agentFinalState', agentFinalState);
     //await this.bot.api.sendMessage(userId, message);
   }
 
