@@ -4,6 +4,8 @@ import { initChatModel } from 'langchain/chat_models/universal';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { createSupervisor } from '@langchain/langgraph-supervisor';
 
+import { PriceFinder } from './price-finder';
+
 const add = tool(async (args) => args.a + args.b, {
   name: 'add',
   description: 'Add two numbers.',
@@ -70,16 +72,23 @@ export class Supervisor {
     });
   }
 
+  private async createPriceFinderAgent() {
+    const priceFinder = new PriceFinder();
+    const workflow = priceFinder.getWorkflow();
+    return workflow.compile({ name: 'price_finder' });
+  }
+
   async getWorkflow() {
     const mathAgent = await this.createMathAgent();
     const researchAgent = await this.createResearchAgent();
+    const priceFinderAgent = await this.createPriceFinderAgent();
 
     const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
     });
 
     return createSupervisor({
-      agents: [researchAgent, mathAgent],
+      agents: [mathAgent, priceFinderAgent],
       llm: model,
       prompt:
         'You are a team supervisor managing a research expert and a math expert. ' +
