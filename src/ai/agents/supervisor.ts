@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { tool } from '@langchain/core/tools';
-import { AzureChatOpenAI } from '@langchain/openai';
+import { initChatModel } from 'langchain/chat_models/universal';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { createSupervisor } from '@langchain/langgraph-supervisor';
 
@@ -43,9 +43,8 @@ const webSearch = tool(
 );
 
 export class Supervisor {
-  private createMathAgent() {
-    const model = new AzureChatOpenAI({
-      model: 'gpt-4o-mini',
+  private async createMathAgent() {
+    const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
     });
 
@@ -57,9 +56,8 @@ export class Supervisor {
     });
   }
 
-  private createResearchAgent() {
-    const model = new AzureChatOpenAI({
-      model: 'gpt-4o-mini',
+  private async createResearchAgent() {
+    const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
     });
 
@@ -72,12 +70,11 @@ export class Supervisor {
     });
   }
 
-  getWorkflow() {
-    const mathAgent = this.createMathAgent();
-    const researchAgent = this.createResearchAgent();
+  async getWorkflow() {
+    const mathAgent = await this.createMathAgent();
+    const researchAgent = await this.createResearchAgent();
 
-    const model = new AzureChatOpenAI({
-      model: 'gpt-4o-mini',
+    const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
     });
 
