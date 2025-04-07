@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
 
-@Module({})
+import { AiService } from './ai.service';
+
+@Module({
+  providers: [AiService],
+})
 export class AiModule {}
