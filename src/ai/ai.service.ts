@@ -14,7 +14,8 @@ export class AiService {
   }
 
   getPriceFinder() {
-    return this.priceFinder.getWorkflow().compile({
+    const workflow = this.priceFinder.getWorkflow();
+    return workflow.compile({
       checkpointer,
       store,
     });
