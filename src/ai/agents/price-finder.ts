@@ -4,8 +4,8 @@
  */
 
 import { z } from 'zod';
-import { AzureChatOpenAI } from '@langchain/openai';
 import { BaseMessage } from '@langchain/core/messages';
+import { initChatModel } from 'langchain/chat_models/universal';
 import { createCua, CUAAnnotation } from '@langchain/langgraph-cua';
 import { Annotation, END, START, StateGraph } from '@langchain/langgraph';
 
@@ -46,8 +46,7 @@ export class PriceFinder {
         ),
     });
 
-    const model = new AzureChatOpenAI({
-      model: 'gpt-4o-mini',
+    const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
     });
 
@@ -101,8 +100,7 @@ export class PriceFinder {
         this.formatMessages(state.messages),
     };
 
-    const model = new AzureChatOpenAI({
-      model: 'gpt-4o-mini',
+    const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
     });
 
