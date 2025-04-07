@@ -1,18 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { PriceFinder, store, checkpointer } from './agents';
+import { Supervisor, PriceFinder, store, checkpointer } from './agents';
 
 @Injectable()
 export class AiService {
+  private readonly supervisor: Supervisor;
   private readonly priceFinder: PriceFinder;
   private readonly logger = new Logger(AiService.name);
 
   constructor() {
+    this.supervisor = new Supervisor();
     this.priceFinder = new PriceFinder();
   }
 
   getPriceFinder() {
     return this.priceFinder.getWorkflow().compile({
+      checkpointer,
+      store,
+    });
+  }
+
+  async getSupervisor() {
+    const workflow = await this.supervisor.getWorkflow();
+    return workflow.compile({
       checkpointer,
       store,
     });
