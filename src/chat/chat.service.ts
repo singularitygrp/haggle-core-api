@@ -38,9 +38,9 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
     const stream = await priceFinder.stream(
       { messages: [new HumanMessage(message)] },
       {
-        recursionLimit: 100,
         configurable: { thread_id: 1 },
         streamMode: 'updates',
+        recursionLimit: 100,
         subgraphs: true,
       },
     );
