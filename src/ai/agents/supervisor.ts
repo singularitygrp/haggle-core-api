@@ -48,7 +48,7 @@ const webSearch = tool(
 );
 
 export class Supervisor {
-  private createMathAgent(): any {
+  private createMathAgent() {
     return createReactAgent({
       llm: model,
       tools: [add, multiply],
@@ -57,7 +57,7 @@ export class Supervisor {
     });
   }
 
-  private createResearchAgent(): any {
+  private createResearchAgent() {
     return createReactAgent({
       llm: model,
       tools: [webSearch],
