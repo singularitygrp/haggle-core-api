@@ -21,9 +21,8 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     this.bot.start();
     this.bot.on('message', async (ctx) => {
-      const message = ctx.message;
-      await this.sendMessage(message);
-      this.logger.log(`${message.from.username} said: ${message.text}`);
+      await this.sendMessage(ctx.message);
+      this.logger.log(`${ctx.message.from.username} said: ${ctx.message.text}`);
     });
   }
 
