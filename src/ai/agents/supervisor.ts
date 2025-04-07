@@ -4,11 +4,6 @@ import { AzureChatOpenAI } from '@langchain/openai';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { createSupervisor } from '@langchain/langgraph-supervisor';
 
-const model = new AzureChatOpenAI({
-  model: 'gpt-4o-mini',
-  temperature: 0,
-});
-
 const add = tool(async (args) => args.a + args.b, {
   name: 'add',
   description: 'Add two numbers.',
@@ -49,6 +44,11 @@ const webSearch = tool(
 
 export class Supervisor {
   private createMathAgent() {
+    const model = new AzureChatOpenAI({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+    });
+
     return createReactAgent({
       llm: model,
       tools: [add, multiply],
@@ -58,6 +58,11 @@ export class Supervisor {
   }
 
   private createResearchAgent() {
+    const model = new AzureChatOpenAI({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+    });
+
     return createReactAgent({
       llm: model,
       tools: [webSearch],
@@ -70,6 +75,11 @@ export class Supervisor {
   getWorkflow() {
     const mathAgent = this.createMathAgent();
     const researchAgent = this.createResearchAgent();
+
+    const model = new AzureChatOpenAI({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+    });
 
     return createSupervisor({
       agents: [researchAgent, mathAgent],
