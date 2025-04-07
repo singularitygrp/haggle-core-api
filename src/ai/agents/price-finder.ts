@@ -9,11 +9,6 @@ import { BaseMessage } from '@langchain/core/messages';
 import { createCua, CUAAnnotation } from '@langchain/langgraph-cua';
 import { Annotation, END, START, StateGraph } from '@langchain/langgraph';
 
-const model = new AzureChatOpenAI({
-  model: 'gpt-4o-mini',
-  temperature: 0,
-});
-
 const configuredCuaGraph = createCua();
 
 const PriceFinderAnnotation = Annotation.Root({
@@ -49,6 +44,11 @@ export class PriceFinder {
         .describe(
           "The node to route to, either 'computer_use_agent' for any input which might require using a computer to assist the user, or 'respond' for any other input",
         ),
+    });
+
+    const model = new AzureChatOpenAI({
+      model: 'gpt-4o-mini',
+      temperature: 0,
     });
 
     const modelWithTools = model.withStructuredOutput(routingSchema);
@@ -100,6 +100,11 @@ export class PriceFinder {
         'Here are all of the messages in the conversation:\n\n' +
         this.formatMessages(state.messages),
     };
+
+    const model = new AzureChatOpenAI({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+    });
 
     const response = await model.invoke([systemMessage, humanMessage]);
 
