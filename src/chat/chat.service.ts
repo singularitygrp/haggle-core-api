@@ -24,4 +24,8 @@ export class ChatService implements OnModuleInit {
   async sendMessage(userId: number, message: string) {
     await this.bot.api.sendMessage(userId, message);
   }
+
+  async onModuleDestroy() {
+    await this.bot.stop();
+  }
 }
