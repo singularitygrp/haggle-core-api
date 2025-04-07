@@ -22,12 +22,14 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
     this.bot.start();
     this.bot.on('message', async (ctx) => {
       const message = ctx.message;
+      await this.sendMessage(message);
       this.logger.log(`${message.from.username} said: ${message.text}`);
     });
   }
 
-  async sendMessage(userId: number, message: string) {
-    await this.bot.api.sendMessage(userId, message);
+  async sendMessage(message: any) {
+    console.log(message);
+    //await this.bot.api.sendMessage(userId, message);
   }
 
   async onModuleDestroy() {
