@@ -50,8 +50,6 @@ export class PriceFinder {
     const model = new AzureChatOpenAI({
       modelName: 'gpt-4o-mini',
       temperature: 0,
-      azureOpenAIApiDeploymentName: 'gpt-4o-mini',
-      azureOpenAIApiVersion: '2024-12-01-preview',
     });
 
     const modelWithTools = model.withStructuredOutput(routingSchema);
@@ -107,8 +105,6 @@ export class PriceFinder {
     const model = new AzureChatOpenAI({
       modelName: 'gpt-4o-mini',
       temperature: 0,
-      azureOpenAIApiDeploymentName: 'gpt-4o-mini',
-      azureOpenAIApiVersion: '2024-12-01-preview',
     });
 
     const response = await model.invoke([systemMessage, humanMessage]);
