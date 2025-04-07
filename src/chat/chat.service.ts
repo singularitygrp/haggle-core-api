@@ -35,11 +35,23 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
   async sendMessage(message: any) {
     console.log(message);
     const priceFinder = this.aiService.getPriceFinder();
-    const agentFinalState = await priceFinder.invoke(
+    // const agentFinalState = await priceFinder.invoke(
+    //   { messages: [new HumanMessage(message)] },
+    //   { configurable: { thread_id: 1 } },
+    // );
+    const stream = await priceFinder.stream(
       { messages: [new HumanMessage(message)] },
-      { configurable: { thread_id: 1 } },
+      {
+        recursionLimit: 100,
+        configurable: { thread_id: 1 },
+        streamMode: 'updates',
+        subgraphs: true,
+      },
     );
-    console.log('agentFinalState', agentFinalState);
+    for await (const update of stream) {
+      console.log(`\n----\nUPDATE: ${JSON.stringify(update, null, 2)}\n----\n`);
+    }
+    // console.log('agentFinalState', agentFinalState);
     //await this.bot.api.sendMessage(userId, message);
   }
 
