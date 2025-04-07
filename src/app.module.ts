@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { AiModule } from './ai/ai.module';
 import { AppService } from './app.service';
 import { ChatModule } from './chat/chat.module';
-import { AppController } from './app.controller';
 import { CommerceModule } from './commerce/commerce.module';
 
 @Module({
@@ -16,7 +15,7 @@ import { CommerceModule } from './commerce/commerce.module';
     ChatModule,
     CommerceModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule {}
