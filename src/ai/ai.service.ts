@@ -12,7 +12,7 @@ export class AiService {
   }
 
   getPriceFinder() {
-    const graph = this.priceFinder.getWorkflow().compile({
+    return this.priceFinder.getWorkflow().compile({
       checkpointer: memorySaver,
       store: inMemoryStore,
     });
