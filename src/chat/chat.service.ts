@@ -15,8 +15,10 @@ export class ChatService implements OnModuleInit {
 
   async onModuleInit() {
     this.bot.start();
-    const bot = await this.bot.api.getMe();
-    this.logger.log(`${bot.first_name} bot is running`);
+    this.bot.on('message', async (ctx) => {
+      const message = ctx.message;
+      this.logger.log(`${message.from.username} said: ${message.text}`);
+    });
   }
 
   async sendMessage(userId: number, message: string) {
