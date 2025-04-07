@@ -1,9 +1,15 @@
+/**
+ * Price Finder: A LangGraph workflow that routes user requests to either a general response
+ * or a Computer Use Agent (CUA) for web-based price lookups.
+ */
+
 import { z } from 'zod';
 import { AzureChatOpenAI } from '@langchain/openai';
 import { BaseMessage } from '@langchain/core/messages';
 import { createCua, CUAAnnotation } from '@langchain/langgraph-cua';
 import { Annotation, END, START, StateGraph } from '@langchain/langgraph';
 
+// Create the Computer Use Agent (CUA) graph
 const configuredCuaGraph = createCua();
 
 const PriceFinderAnnotation = Annotation.Root({
@@ -15,6 +21,13 @@ type PriceFinderState = typeof PriceFinderAnnotation.State;
 type PriceFinderUpdate = typeof PriceFinderAnnotation.Update;
 
 export class PriceFinder {
+  /**
+   * Analyzes the user's latest message and determines whether to route to the
+   * computer use agent or to generate a direct response.
+   *
+   * @param state Current workflow state containing message history
+   * @returns Updated state with routing decision
+   */
   private async processInput(
     state: PriceFinderState,
   ): Promise<PriceFinderUpdate> {
@@ -52,12 +65,24 @@ export class PriceFinder {
     return { route: response.route };
   }
 
+  /**
+   * Formats a list of messages into a single string with type and content.
+   *
+   * @param messages List of messages to format
+   * @returns Formatted string of messages
+   */
   private formatMessages(messages: BaseMessage[]): string {
     return messages
       .map((message) => `${message._getType()}: ${message.content}`)
       .join('\n');
   }
 
+  /**
+   * Generates a general response to the user based on the entire conversation history.
+   *
+   * @param state Current workflow state containing full message history
+   * @returns Updated state with the generated response
+   */
   private async respond(state: PriceFinderState): Promise<PriceFinderUpdate> {
     const systemMessage = {
       role: 'system',
@@ -85,10 +110,21 @@ export class PriceFinder {
     return { messages: [response] };
   }
 
+  /**
+   * Conditional router that returns the route determined by processInput.
+   *
+   * @param state Current workflow state with route decision
+   * @returns String route name for the next node
+   */
   private routeAfterProcessingInput(state: PriceFinderState): string {
     return state.route || 'respond';
   }
 
+  /**
+   * Creates the workflow graph using LangGraph's StateGraph.
+   *
+   * @returns Configured workflow graph
+   */
   getWorkflow() {
     return new StateGraph(PriceFinderAnnotation)
       .addNode('process_input', this.processInput)
