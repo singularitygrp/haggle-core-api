@@ -27,9 +27,34 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     this.bot.start();
     this.bot.on('message', async (ctx) => {
-      await this.sendMessage(ctx.message.text);
+      //await this.sendMessage(ctx.message.text);
+      await this.sendAltMessage(ctx.message.text);
       this.logger.log(`${ctx.message.from.username} said: ${ctx.message.text}`);
     });
+  }
+
+  async sendAltMessage(message: any) {
+    const supervisor = await this.aiService.getSupervisor();
+
+    const stream = await supervisor.stream(
+      { messages: [new HumanMessage(message)] },
+      {
+        streamMode: 'values',
+        configurable: { thread_id: 1 },
+      },
+    );
+
+    for await (const { messages } of stream) {
+      const msg = messages[messages?.length - 1];
+      if (msg?.content) {
+        console.log(msg.content);
+      } else if (msg?.tool_calls?.length > 0) {
+        console.log(msg.tool_calls);
+      } else {
+        console.log(msg);
+      }
+      console.log('-----\n');
+    }
   }
 
   async sendMessage(message: any) {
@@ -50,8 +75,6 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         `\n----\nUPDATE: ${JSON.stringify(update, null, 2)}\n----\n`,
       );
     }
-
-    //await this.bot.api.sendMessage(userId, message);
   }
 
   async onModuleDestroy() {
