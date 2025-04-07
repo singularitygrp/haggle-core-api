@@ -1,10 +1,13 @@
 import { z } from 'zod';
 import { tool } from '@langchain/core/tools';
-import { ChatOpenAI } from '@langchain/openai';
+import { AzureChatOpenAI } from '@langchain/openai';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { createSupervisor } from '@langchain/langgraph-supervisor';
 
-const model = new ChatOpenAI({ modelName: 'gpt-4o' });
+const model = new AzureChatOpenAI({
+  model: 'gpt-4o-mini',
+  temperature: 0,
+});
 
 const add = tool(async (args) => args.a + args.b, {
   name: 'add',
