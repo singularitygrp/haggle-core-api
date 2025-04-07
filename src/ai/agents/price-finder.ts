@@ -48,7 +48,7 @@ export class PriceFinder {
     });
 
     const model = new AzureChatOpenAI({
-      modelName: 'gpt-4o-mini',
+      model: 'gpt-4o-mini',
       temperature: 0,
     });
 
@@ -103,7 +103,7 @@ export class PriceFinder {
     };
 
     const model = new AzureChatOpenAI({
-      modelName: 'gpt-4o-mini',
+      model: 'gpt-4o-mini',
       temperature: 0,
     });
 
