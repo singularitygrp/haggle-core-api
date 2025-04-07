@@ -31,16 +31,16 @@ jobs:
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: crsousprod.azurecr.io
+          login-server: crsgprod.azurecr.io
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build . -t crsousprod.azurecr.io/sous-core-api:${{ github.run_number }}
+        run: docker build . -t crsgprod.azurecr.io/haggle-core-api:${{ github.run_number }}
         working-directory: .
 
       - name: Push Docker image to ACR
-        run: docker push crsousprod.azurecr.io/sous-core-api:${{ github.run_number }}
+        run: docker push crsgprod.azurecr.io/haggle-core-api:${{ github.run_number }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -57,8 +57,8 @@ jobs:
       - name: Deploy Container App
         uses: azure/container-apps-deploy-action@v1
         with:
-          acrName: crsousprod
-          containerAppName: ca-sous-core-api-prod
-          resourceGroup: rg-sous-prod
-          imageToDeploy: crsousprod.azurecr.io/sous-core-api:${{ github.run_number }}
-          environmentVariables: 'LANGCHAIN_API_KEY=secretref:langchain-api-key LANGCHAIN_TRACING_V2=true LANGCHAIN_CALLBACKS_BACKGROUND=true LANGCHAIN_ENDPOINT=secretref:langchain-endpoint LANGCHAIN_PROJECT=secretref:langchain-project TELEGRAM_BOT_TOKEN=secretref:telegram-bot-token'
+          acrName: crsgprod
+          containerAppName: ca-haggle-core-api-prod
+          resourceGroup: rg-sg-prod
+          imageToDeploy: crsgprod.azurecr.io/haggle-core-api:${{ github.run_number }}
+          environmentVariables: 'LANGCHAIN_API_KEY=secretref:langchain-api-key LANGCHAIN_TRACING_V2=true LANGCHAIN_CALLBACKS_BACKGROUND=true LANGCHAIN_ENDPOINT=secretref:langchain-endpoint LANGCHAIN_PROJECT=secretref:langchain-project OPENAI_API_KEY=secretref:openai-api-key SCRAPYBARA_API_KEY=secretref:scrapybara-api-key TELEGRAM_BOT_TOKEN=secretref:telegram-bot-token'
