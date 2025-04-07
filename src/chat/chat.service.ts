@@ -1,9 +1,14 @@
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { Bot } from 'grammy';
 import { ConfigService } from '@nestjs/config';
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 
 @Injectable()
-export class ChatService implements OnModuleInit {
+export class ChatService implements OnModuleInit, OnModuleDestroy {
   private readonly bot: Bot;
   private readonly logger = new Logger(ChatService.name);
 
