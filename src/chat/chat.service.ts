@@ -40,7 +40,7 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
       {
         configurable: { thread_id: 1 },
         streamMode: 'updates',
-        recursionLimit: 100,
+        recursionLimit: 1000,
         subgraphs: true,
       },
     );
