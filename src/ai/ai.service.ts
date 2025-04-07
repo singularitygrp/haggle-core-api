@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { PriceFinder, memorySaver, inMemoryStore } from './agents';
+import { PriceFinder, store, checkpointer } from './agents';
 
 @Injectable()
 export class AiService {
@@ -13,8 +13,8 @@ export class AiService {
 
   getPriceFinder() {
     return this.priceFinder.getWorkflow().compile({
-      checkpointer: memorySaver,
-      store: inMemoryStore,
+      checkpointer,
+      store,
     });
   }
 }
