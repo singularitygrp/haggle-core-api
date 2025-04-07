@@ -53,6 +53,7 @@ export class PriceFinder {
       azureOpenAIApiDeploymentName: 'gpt-4o-mini',
       azureOpenAIApiVersion: '2024-12-01-preview',
     });
+
     const modelWithTools = model.withStructuredOutput(routingSchema);
 
     const messages = [
@@ -109,6 +110,7 @@ export class PriceFinder {
       azureOpenAIApiDeploymentName: 'gpt-4o-mini',
       azureOpenAIApiVersion: '2024-12-01-preview',
     });
+
     const response = await model.invoke([systemMessage, humanMessage]);
 
     return { messages: [response] };
