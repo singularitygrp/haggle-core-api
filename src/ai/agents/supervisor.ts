@@ -70,7 +70,7 @@ export class Supervisor {
     console.log('Last message from price finder', lastMessage);
 
     const response = await workflow.invoke({
-      messages: [new HumanMessage(lastMessage.content as string)],
+      messages: [new HumanMessage(lastMessage)],
     });
 
     return new Command({
