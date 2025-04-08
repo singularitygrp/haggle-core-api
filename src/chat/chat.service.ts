@@ -27,13 +27,12 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     this.bot.start();
     this.bot.on('message', async (ctx) => {
-      //await this.sendMessage(ctx.message.text);
-      await this.sendAltMessage(ctx.message.text);
+      await this.sendMessage(ctx.message.text);
       this.logger.log(`${ctx.message.from.username} said: ${ctx.message.text}`);
     });
   }
 
-  async sendAltMessage(message: any) {
+  async sendMessage(message: any) {
     const supervisor = this.aiService.getSupervisor();
 
     const stream = await supervisor.stream(
@@ -55,26 +54,6 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
         console.log(msg);
       }
       console.log('-----\n');
-    }
-  }
-
-  async sendMessage(message: any) {
-    const priceFinder = this.aiService.getPriceFinder();
-
-    const stream = await priceFinder.stream(
-      { messages: [new HumanMessage(message)] },
-      {
-        configurable: { thread_id: 1 },
-        streamMode: 'updates',
-        recursionLimit: 1000,
-        subgraphs: true,
-      },
-    );
-
-    for await (const update of stream) {
-      this.logger.debug(
-        `\n----\nUPDATE: ${JSON.stringify(update, null, 2)}\n----\n`,
-      );
     }
   }
 
