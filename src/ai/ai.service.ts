@@ -21,8 +21,8 @@ export class AiService {
     });
   }
 
-  async getSupervisor() {
-    const workflow = await this.supervisor.getWorkflow();
+  getSupervisor() {
+    const workflow = this.supervisor.getWorkflow();
     return workflow.compile({
       checkpointer,
       store,
