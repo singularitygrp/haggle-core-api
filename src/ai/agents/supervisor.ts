@@ -55,7 +55,19 @@ export class Supervisor {
       store,
     });
 
+    // const stream = await workflow.stream(
+    //   { messages: [new HumanMessage(message)] },
+    //   {
+    //     configurable: { thread_id: 1 },
+    //     streamMode: 'updates',
+    //     recursionLimit: 1000,
+    //     subgraphs: true,
+    //   },
+    // );
+
     const lastMessage = state.messages[state.messages.length - 1];
+
+    console.log('Last message from price finder', lastMessage);
 
     const response = await workflow.invoke({
       messages: [new HumanMessage(lastMessage.content as string)],
