@@ -34,7 +34,7 @@ export class ChatService implements OnModuleInit, OnModuleDestroy {
   }
 
   async sendAltMessage(message: any) {
-    const supervisor = await this.aiService.getSupervisor();
+    const supervisor = this.aiService.getSupervisor();
 
     const stream = await supervisor.stream(
       { messages: [new HumanMessage(message)] },
