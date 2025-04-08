@@ -88,8 +88,8 @@ export class Supervisor {
 
     const systemPrompt = `You are a supervisor agent that determines which specialized agent should handle a user query.
     Available agents:
-    - agent1: General conversation
-    - agent2: General information
+    - agent1: Jokes conversation
+    - agent2: Quotes information
     - price_finder: For any requests related to finding products or prices
     - __end__: If the conversation should end
 
