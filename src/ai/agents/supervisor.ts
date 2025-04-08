@@ -10,6 +10,12 @@ import { initChatModel } from 'langchain/chat_models/universal';
 import { PriceFinder } from './price-finder';
 
 export class Supervisor {
+  private readonly priceFinder: PriceFinder;
+
+  constructor() {
+    this.priceFinder = new PriceFinder();
+  }
+
   private async createAgentOne(state: typeof MessagesAnnotation.State) {
     const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
@@ -38,6 +44,11 @@ export class Supervisor {
     });
   }
 
+  private async createPriceFinder(state: typeof MessagesAnnotation.State) {
+    const workflow = this.priceFinder.getWorkflow();
+    return workflow.compile();
+  }
+
   private async createSupervisor(state: typeof MessagesAnnotation.State) {
     const model = await initChatModel('gpt-4o-mini', {
       temperature: 0,
@@ -46,7 +57,7 @@ export class Supervisor {
     const response = await model
       .withStructuredOutput(
         z.object({
-          next_agent: z.enum(['agent1', 'agent2', '__end__']),
+          next_agent: z.enum(['agent1', 'agent2', 'price_finder', '__end__']),
         }),
       )
       .invoke(state.messages);
@@ -59,15 +70,19 @@ export class Supervisor {
     const agent1 = this.createAgentOne;
     const agent2 = this.createAgentTwo;
     const supervisor = this.createSupervisor;
+    const priceFinder = this.createPriceFinder;
 
     return new StateGraph(MessagesAnnotation)
       .addNode('supervisor', supervisor, {
-        ends: ['agent1', 'agent2', '__end__'],
+        ends: ['agent1', 'agent2', 'price_finder', '__end__'],
       })
       .addNode('agent1', agent1, {
         ends: ['supervisor'],
       })
       .addNode('agent2', agent2, {
+        ends: ['supervisor'],
+      })
+      .addNode('price_finder', priceFinder, {
         ends: ['supervisor'],
       })
       .addEdge(START, 'supervisor')
