@@ -22,10 +22,6 @@ export class AiService {
   }
 
   getSupervisor() {
-    const workflow = this.supervisor.getWorkflow();
-    return workflow.compile({
-      checkpointer,
-      store,
-    });
+    return this.supervisor.getWorkflow();
   }
 }
